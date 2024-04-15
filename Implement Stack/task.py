@@ -1,44 +1,51 @@
-class MyStack(object):
-
+class Queue:
     def __init__(self):
-        self.que1 = []
-        self.que2 = []
+        self.items = []
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def enqueue(self, item):
+        self.items.append(item)
+
+    def dequeue(self):
+        if self.is_empty():
+            raise IndexError("Trying to dequeue from an empty queue")
+        return self.items.pop(0)
+
+    def peek(self):
+        if self.is_empty():
+            raise IndexError("Trying to peek into an empty queue")
+        return self.items[0]
+
+    def size(self):
+        return len(self.items)
+
+class MyStack:
+    def __init__(self):
+        self.queue1 = Queue()
+        self.queue2 = Queue()
 
     def push(self, x):
-        """
-        :type x: int
-        :rtype: None
-        """
-        self.que2.append(x)
-        while self.que1:
-            self.que2.append(self.que1.pop(0))
-        self.que1, self.que2 = self.que2, self.que1
+        self.queue1.enqueue(x)
 
     def pop(self):
-        """
-        :rtype: int
-        """
-        return self.que1.pop(0)
+        if self.queue2.is_empty():
+            while not self.queue1.is_empty():
+                self.queue2.enqueue(self.queue1.dequeue())
+        return self.queue2.dequeue()
 
     def top(self):
-        """
-        :rtype: int
-        """
-        if self.que1:
-            return self.que1[0]
-        else:
-            return None
+        if self.queue2.is_empty():
+            while not self.queue1.is_empty():
+                self.queue2.enqueue(self.queue1.dequeue())
+        return self.queue2.peek()
 
     def empty(self):
-        """
-        :rtype: bool
-        """
-        return not self.que1
+        return self.queue1.is_empty() and self.queue2.is_empty()
 
-
-# Your MyStack object will be instantiated and called as such:
-# obj = MyStack()
-# obj.push(x)
-# param_2 = obj.pop()
-# param_3 = obj.top()
-# param_4 = obj.empty()
+obj = MyStack()
+obj.push(x)
+param_2 = obj.pop()
+param_3 = obj.top()
+param_4 = obj.empty()
