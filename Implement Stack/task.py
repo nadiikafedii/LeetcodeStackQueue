@@ -1,6 +1,11 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
 class Queue:
     def __init__(self):
-        self.items = []
+        self.top = None
 
     def is_empty(self):
         return len(self.items) == 0

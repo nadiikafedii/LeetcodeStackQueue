@@ -1,24 +1,28 @@
+from collections import defaultdict, deque
+
 class FreqStack(object):
 
     def __init__(self):
-        self.stack = []
+        self.freq_map = defaultdict(int)
+        self.group_map = defaultdict(deque)
+        self.max_freq = 0
 
     def push(self, val):
         """
         :type val: int
         :rtype: None
         """
-        self.stack.append(val)
-        
+        self.freq_map[val] += 1
+        freq = self.freq_map[val]
+        self.group_map[freq].append(val)
+        self.max_freq = max(self.max_freq, freq)
 
     def pop(self):
         """
         :rtype: int
         """
-        
-
-
-# Your FreqStack object will be instantiated and called as such:
-# obj = FreqStack()
-# obj.push(val)
-# param_2 = obj.pop()
+        val = self.group_map[self.max_freq].pop()
+        self.freq_map[val] -= 1
+        if not self.group_map[self.max_freq]:
+            self.max_freq -= 1
+        return val
